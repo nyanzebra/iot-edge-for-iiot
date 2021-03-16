@@ -33,6 +33,9 @@ function passArrayToARM() {
    echo ${output}
 }
 
+#global variable
+scriptFolder=$(dirname "$(readlink -f "$0")")
+
 # Get arguments
 while :; do
     case $1 in
