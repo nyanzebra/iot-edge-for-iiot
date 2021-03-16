@@ -178,8 +178,8 @@ echo "==	            Grafana and Prometheus                 =="
 echo "==========================================================="
 echo ""
 
-ssh $jbUserAndFQDN 'bash -s' < ./prometheus_install.sh
-ssh $jbUserAndFQDN 'bash -s' < ./grafana_install.sh
+ssh $jbUserAndFQDN 'bash -s' < $scriptFolder/prometheus_install.sh
+ssh $jbUserAndFQDN 'bash -s' < $scriptFolder/grafana_install.sh
 
 echo ""
 echo ""
