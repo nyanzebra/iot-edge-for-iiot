@@ -158,7 +158,7 @@ cat <<-END
 END
 )
 
-prometheus_install.sh < $prometheusInstallScript
+echo $prometheusInstallScript > $scriptFolder/prometheus_install.sh
 
 grafanaInstallScript=$(
 cat <<-END
@@ -171,15 +171,15 @@ cat <<-END
 END
 )
 
-grafana_install.sh < $grafanaInstallScript
+echo $grafanaInstallScript > $scriptFolder/grafana_install.sh
 
 echo "==========================================================="
 echo "==	            Grafana and Prometheus                 =="
 echo "==========================================================="
 echo ""
 
-ssh $jbUserAndFQDN 'bash -s' < prometheus_install.sh
-ssh $jbUserAndFQDN 'bash -s' < grafana_install.sh
+ssh $jbUserAndFQDN 'bash -s' < ./prometheus_install.sh
+ssh $jbUserAndFQDN 'bash -s' < ./grafana_install.sh
 
 echo ""
 echo ""
