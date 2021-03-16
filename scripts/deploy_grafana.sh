@@ -129,6 +129,7 @@ END
 )
 
 prometheusInstallScript=$(
+cat <<-END
     sudo apt update &&
     sudo apt install nginx -y &&
     sudo systemctl start nginx &&
@@ -154,15 +155,18 @@ prometheusInstallScript=$(
     sudo systemctl start prometheus &&
     sudo systemctl enable prometheus &&
     sudo systemctl status prometheus
+END
 )
 
 grafanaInstallScript=$(
+cat <<-END
     sudo apt-get install -y apt-transport-https &&
     sudo apt-get install -y software-properties-common wget &&
     wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add - &&
     echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list &&
     sudo apt-get update &&
     sudo apt-get install grafana
+END
 )
 
 echo "==========================================================="
