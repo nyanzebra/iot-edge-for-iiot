@@ -158,6 +158,8 @@ cat <<-END
 END
 )
 
+prometheus_install.sh < $prometheusInstallScript
+
 grafanaInstallScript=$(
 cat <<-END
     sudo apt-get install -y apt-transport-https &&
@@ -169,13 +171,15 @@ cat <<-END
 END
 )
 
+grafana_install.sh < $grafanaInstallScript
+
 echo "==========================================================="
 echo "==	            Grafana and Prometheus                 =="
 echo "==========================================================="
 echo ""
 
-ssh $jbUserAndFQDN $prometheusInstallScript
-ssh $jbUserAndFQDN $grafanaInstallScript
+ssh $jbUserAndFQDN 'bash -s' < prometheus_install.sh
+ssh $jbUserAndFQDN 'bash -s' < grafana_install.sh
 
 echo ""
 echo ""
