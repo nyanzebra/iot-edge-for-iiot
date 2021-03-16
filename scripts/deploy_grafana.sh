@@ -36,6 +36,14 @@ function passArrayToARM() {
 #global variable
 scriptFolder=$(dirname "$(readlink -f "$0")")
 
+# Default settings
+location="eastus"
+resourceGroupPrefix="iotedge4iiot"
+networkName="PurdueNetwork"
+configFilePath="${scriptFolder}/../config.txt"
+adminUsername="iiotadmin"
+vmSize="Standard_B1ms" #"Standard_D3_v2"
+
 # Get arguments
 while :; do
     case $1 in
