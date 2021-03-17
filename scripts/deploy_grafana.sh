@@ -93,8 +93,7 @@ source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
 targets="[$(passArrayToARM ${iotEdgeDevicesSubnets[@]})]"
 
-prometheusConfiguration=$(
-cat <<-END
+prometheusConfiguration="
 global:
   scrape_interval: 15s
 
@@ -102,12 +101,9 @@ scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 5s
     static_configs:
-      - targets: $targets
-END
-)
+      - targets: $targets"
 
-prometheusServiceConfiguration=$(
-cat <<-END
+prometheusServiceConfiguration="
 [Unit]
 Description=Prometheus
 Wants=network-online.target
@@ -124,64 +120,65 @@ ExecStart=/usr/local/bin/prometheus \
     --web.console.libraries=/etc/prometheus/console_libraries
 
 [Install]
-WantedBy=multi-user.target
-END
-)
+WantedBy=multi-user.target"
 
-prometheusInstallScript=$(
-cat <<-END
-    sudo apt update &&
-    sudo apt install nginx -y &&
-    sudo systemctl start nginx &&
-    sudo systemctl start nginx &&
-    sudo useradd --no-create-home --shell /bin/false prome &&
-    sudo useradd --no-create-home --shell /bin/false node_exporter &&
-    sudo mkdir /etc/prometheus &&
-    sudo mkdir /var/lib/prometheus &&
-    wget https://github.com/prometheus/prometheus/releases/download/v2.0.0/prometheus-2.0.0.linux-amd64.tar.gz &&
-    tar xvf prometheus-2.0.0.linux-amd64.tar.gz &&
-    sudo cp prometheus-2.0.0.linux-amd64/prometheus /usr/local/bin/ &&
-    sudo cp prometheus-2.0.0.linux-amd64/promtool /usr/local/bin/ &&
-    sudo chown prome:prome /usr/local/bin/prometheus &&
-    sudo chown prome:prome /usr/local/bin/promtool &&
-    sudo chown prome:prome /var/lib/prometheus &&
-    sudo cp -r prometheus-2.0.0.linux-amd64/consoles /etc/prometheus &&
-    sudo cp -r prometheus-2.0.0.linux-amd64/console_libraries /etc/prometheus &&
-    sudo chown -R prome:prome /etc/prometheus/consoles &&
-    sudo chown -R prome:prome /etc/prometheus/console_libraries &&
-    sudo $prometheusConfiguration > /etc/prometheus/prometheus.yml &&
-    sudo $prometheusServiceConfiguration > /etc/systemd/system/prometheus.service &&
-    sudo systemctl daemon-reload &&
-    sudo systemctl start prometheus &&
-    sudo systemctl enable prometheus &&
-    sudo systemctl status prometheus
-END
-)
+prometheusInstallScript="
+    sudo apt update
+    sudo apt install nginx -y
+    sudo systemctl start nginx
+    sudo systemctl start nginx
+    sudo useradd --no-create-home --shell /bin/false prome
+    sudo useradd --no-create-home --shell /bin/false node_exporter
+    sudo mkdir /etc/prometheus
+    sudo mkdir /var/lib/prometheus
+    wget https://github.com/prometheus/prometheus/releases/download/v2.0.0/prometheus-2.0.0.linux-amd64.tar.gz
+    tar xvf prometheus-2.0.0.linux-amd64.tar.gz
+    sudo cp prometheus-2.0.0.linux-amd64/prometheus /usr/local/bin/
+    sudo cp prometheus-2.0.0.linux-amd64/promtool /usr/local/bin/
+    sudo chown prome:prome /usr/local/bin/prometheus
+    sudo chown prome:prome /usr/local/bin/promtool
+    sudo chown prome:prome /var/lib/prometheus
+    sudo chown prome:prome /etc/prometheus
+    sudo cp -r prometheus-2.0.0.linux-amd64/consoles /etc/prometheus
+    sudo cp -r prometheus-2.0.0.linux-amd64/console_libraries /etc/prometheus
+    sudo chown -R prome:prome /etc/prometheus/consoles
+    sudo chown -R prome:prome /etc/prometheus/console_libraries
+    "
 
-echo $prometheusInstallScript > $scriptFolder/prometheus_install.sh
+echo "$prometheusInstallScript" > $scriptFolder/prometheus_install.sh
 
-grafanaInstallScript=$(
-cat <<-END
-    sudo apt-get install -y apt-transport-https &&
-    sudo apt-get install -y software-properties-common wget &&
-    wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add - &&
-    echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list &&
-    sudo apt-get update &&
-    sudo apt-get install grafana
-END
-)
+grafanaInstallScript="
+    sudo apt-get install -y apt-transport-https
+    sudo apt-get install -y software-properties-common wget
+    wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+    echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+    sudo apt-get update
+    sudo apt-get install grafana"
 
-echo $grafanaInstallScript > $scriptFolder/grafana_install.sh
+echo "$grafanaInstallScript" > $scriptFolder/grafana_install.sh
 
 echo "==========================================================="
-echo "==	            Grafana and Prometheus                 =="
+echo "==                Grafana and Prometheus                 =="
 echo "==========================================================="
 echo ""
 
+echo "Installing on $jbUserAndFQDN"
 ssh $jbUserAndFQDN 'bash -s' < $scriptFolder/prometheus_install.sh
 ssh $jbUserAndFQDN 'bash -s' < $scriptFolder/grafana_install.sh
 
 echo ""
+echo "Post install instructions:"
+echo "sudo echo \"$prometheusConfiguration\" > /etc/prometheus/prometheus.yml"
+echo "sudo echo \"$prometheusServiceConfiguration\" > /etc/systemd/system/prometheus.service"
+echo "sudo systemctl daemon-reload"
+echo "sudo systemctl start prometheus"
+echo "sudo systemctl enable prometheus"
+echo "sudo systemctl status prometheus"
+
+echo ""
 echo ""
 echo "Grafana and Prometheus are installed and configured."
+echo ""
+echo "Changing port for grafana in /etc/grafana/grafana.ini"
+echo "might be required if port conflict occurs."
 echo ""

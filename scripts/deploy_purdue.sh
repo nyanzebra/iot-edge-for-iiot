@@ -106,7 +106,7 @@ if [ ! -z $subscription ]; then
   az account set --subscription $subscription
 fi
 # subscriptionName=$(az account show --query 'name' -o tsv)
-# echo "Executing script with Azure Subscription: ${subscriptionName}" 
+# echo "Executing script with Azure Subscription: ${subscriptionName}"
 
 echo "==========================================================="
 echo "==	                Purdue Network                   =="
@@ -116,17 +116,17 @@ echo ""
 # Deploy Network
 if ( $(az group exists -n "$networkResourceGroupName") )
 then
-  echo Existing resource group "$networkResourceGroupName" found  
+  echo Existing resource group "$networkResourceGroupName" found
 else
   az group create --name "$networkResourceGroupName" --location "$location" --tags "$resourceGroupPrefix" "CreationDate"=$(date --utc +%Y%m%d_%H%M%SZ) 1> /dev/null
-  echo "Resource group: $networkResourceGroupName" 
+  echo "Resource group: $networkResourceGroupName"
 fi
 
 
 networkDeployFilePath="${scriptFolder}/ARM-templates/networkdeploy.json"
 networkOutput=$(az deployment group create --name PurdueEnvironmentDeployment --resource-group "$networkResourceGroupName" --template-file "$networkDeployFilePath" --parameters \
  networkName="$networkName" addressPrefix="$addressPrefix" \
- --query "properties.outputs.[l0SubnetName.value, l0SubnetCidr.value, l1SubnetName.value, l1SubnetCidr.value, l2SubnetName.value, l2SubnetCidr.value, l3SubnetName.value, l3SubnetCidr.value, otDmzSubnetName.value, otDmzSubnetCidr.value, l4SubnetName.value, l4SubnetCidr.value, l5SubnetName.value, l5SubnetCidr.value, itDmzSubnetName.value, itDmzSubnetCidr.value, supportSubnetName.value, supportSubnetCidr.value]" -o tsv) 
+ --query "properties.outputs.[l0SubnetName.value, l0SubnetCidr.value, l1SubnetName.value, l1SubnetCidr.value, l2SubnetName.value, l2SubnetCidr.value, l3SubnetName.value, l3SubnetCidr.value, otDmzSubnetName.value, otDmzSubnetCidr.value, l4SubnetName.value, l4SubnetCidr.value, l5SubnetName.value, l5SubnetCidr.value, itDmzSubnetName.value, itDmzSubnetCidr.value, supportSubnetName.value, supportSubnetCidr.value]" -o tsv)
 
 echo "Purdue Network created. Key values:"
 echo ""
@@ -152,7 +152,7 @@ then
   echo "Existing jumpbox resource group found: $jumpboxResourceGroupName "
 else
   az group create --name "$jumpboxResourceGroupName" --location "$location" --tags "$resourceGroupPrefix"  "CreationDate"=$(date --utc +%Y%m%d_%H%M%SZ)  1> /dev/null
-  echo "Jumpbox resource group: $jumpboxResourceGroupName"  
+  echo "Jumpbox resource group: $jumpboxResourceGroupName"
 fi
 
 jumpboxDeployFilePath="${scriptFolder}/ARM-templates/jumpboxdeploy.json"
@@ -163,7 +163,9 @@ jumpBoxOutput=$(az deployment group create --name PurdueJumpBoxDeployment --reso
 
 jumpBoxOutputs=($jumpBoxOutput)
 jumpBoxUser=${jumpBoxOutputs[0]}
+echo $jumpBoxUser > /tmp/jumpBoxUser
 jumpBoxFullyQualifiedName=${jumpBoxOutputs[1]}
+echo $jumpBoxFullyQualifiedName > /tmp/jumpBoxFQDN
 jumpboxSSH="ssh $jumpBoxUser@$jumpBoxFullyQualifiedName"
 
 # Creating SSH key pair to connect from the jump box to VMs within the Purdue network
@@ -186,10 +188,10 @@ echo ""
 
 if ( $(az group exists -n "$proxyResourceGroupName") )
 then
-  echo "Existing proxies resource group found: $proxyResourceGroupName" 
+  echo "Existing proxies resource group found: $proxyResourceGroupName"
 else
   az group create --name "$proxyResourceGroupName" --location "$location" --tags "$resourceGroupPrefix" "CreationDate"=$(date --utc +%Y%m%d_%H%M%SZ)  1> /dev/null
-  echo "Proxies resource group: $proxyResourceGroupName "  
+  echo "Proxies resource group: $proxyResourceGroupName "
 fi
 
 proxyDeployFilePath="${scriptFolder}/ARM-templates/proxydeploy.json"
