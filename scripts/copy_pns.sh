@@ -98,7 +98,7 @@ source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
 vms="[$(passArrayToARM ${iotEdgeDevicesSubnets[@]})]"
 
-scp -r $scriptFolder/publisherAssets/ $jbUserAndFQDN:/tmp/
+scp -r $scriptFolder/publisher_assets/ $jbUserAndFQDN:/tmp/
 
 for (( i=0; i<${#vms[@]}-1; i+=1))
 do
