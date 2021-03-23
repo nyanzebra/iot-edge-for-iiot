@@ -15,14 +15,15 @@
 
 # IoT Edge and IIOT assets topology
 7-L5-IT-EnterpriseNetwork: L5-mn-edge
-6-L4-IT-SiteLogistics: L4-mn-edge(L5-mn-edge)
-4-L3-OT-SiteOperations: L3a-mn-edge(L4-mn-edge) L3b-mn-edge(L4-mn-edge) L3c-mn-edge(L4-mn-edge)
+6-L4-IT-SiteLogistics: L4a-mn-edge(L5-mn-edge) L4b-mn-edge(L5-mn-edge)
+4-L3-OT-SiteOperations: L3a-mn-edge(L4b-mn-edge) L3b-mn-edge(L4b-mn-edge)
 3-L2-OT-AreaSupervisoryControl: L2-OPC-UA-mn-server(OPC-UA)
 2-L1-OT-BasicControl:
 1-L0-OT-Process:
 
 # IoT Edge configuration
 AcrEnvFilePath: ../ACR.env
+AmlEnvFilePath: ../AML.env
 TopLayerBaseDeploymentTemplateFilePath: ./edgeDeployments/topLayerBaseDeploymentItProxy.template.json
 MiddleLayerBaseDeploymentFilePath: ./edgeDeployments/middleLayerBaseDeployment.json
 BottomLayerBaseDeploymentFilePath: ./edgeDeployments/bottomLayerBaseDeploymentOtProxy.json

@@ -8,6 +8,7 @@ iotEdgeParentDevices=()
 iiotAssets=()
 iiotAssetsSubnets=()
 acrEnvFilePath=""
+amlEnvFilePath=""
 topLayerBaseDeploymentTemplateFilePath=""
 middleLayerBaseDeploymentFilePath=""
 bottomLayerBaseDeploymentFilePath=""
@@ -20,6 +21,10 @@ do
     fi
     if [ "${line:0:14}" == "AcrEnvFilePath" ]; then
         acrEnvFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
+        continue
+    fi
+    if [ "${line:0:14}" == "AmlEnvFilePath" ]; then
+        amlEnvFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
         continue
     fi
     if [ "${line:0:38}" == "TopLayerBaseDeploymentTemplateFilePath" ]; then
@@ -43,7 +48,7 @@ do
     for substring in ${substrings[@]}; do
         if [ $i = 0 ]; then
             subnet=$substring
-        else     
+        else
             devices=$(echo $substring | tr " " "\n")
             for deviceWithParent in ${devices[@]}; do
                 device=$(echo $deviceWithParent | cut -d "(" -f1)

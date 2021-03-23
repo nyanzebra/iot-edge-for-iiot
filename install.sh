@@ -122,7 +122,7 @@ if [ -z $sshPublicKeyPath ]; then
 fi
 
 echo "==========================================================="
-echo "==	              Azure Subscription          	 =="
+echo "==                  Azure Subscription                   =="
 echo "==========================================================="
 echo ""
 if [ ! -z $subscription ]; then
@@ -132,7 +132,7 @@ subscription=$(az account show --query 'name' -o tsv)
 echo "Executing script with Azure Subscription: ${subscription}"
 echo ""
 echo "==========================================================="
-echo "==	              Configuration file          	 =="
+echo "==                  Configuration file                   =="
 echo "==========================================================="
 echo ""
 echo "Using configuration file located at: ${configFilePath}"
@@ -151,12 +151,12 @@ jumpBoxFQDN=$(cat /tmp/jumpBoxFQDN)
 ./scripts/deploy_iotedge_vms.sh -s=$subscription -l=$location -rg=$resourceGroupPrefix -vmSize=$vmSize -sshPublicKeyPath=$jumpBoxSshPublicKeyPath -c=$absoluteConfigFilePath
 ./scripts/provision_iotedge_iothub.sh -s=$subscription -hubrg=$iotHubResourceGroup -hubname=$iotHubName -c=$absoluteConfigFilePath
 ./scripts/configure_iotedge_vms.sh -s=$subscription -edgerg=$iotedgeResourceGroupName -hubrg=$iotHubResourceGroup -hubname=$iotHubName -c=$absoluteConfigFilePath
-./scripts/configure_pn.sh -sshPublicKeyPath=$jumpBoxSshPublicKeyPath -jbUserAndFQDN="$jumpBoxUser@$jumpBoxFQDN"
+./scripts/copy_pns.sh -sshPublicKeyPath=$jumpBoxSshPublicKeyPath -jbUserAndFQDN="$jumpBoxUser@$jumpBoxFQDN"
 ./scripts/lockdown_purdue.sh -s=$subscription -nrg=$networkResourceGroupName
 ./scripts/import_acr.sh -s=$subscription -c=$absoluteConfigFilePath
 ./scripts/deploy_iotedge_iothub.sh -s=$subscription -hubrg=$iotHubResourceGroup -hubname=$iotHubName -c=$absoluteConfigFilePath
 rm $jumpBoxSshPublicKeyPath 2> /dev/null
 
 echo "==========================================================="
-echo "==	              End of deployment script        	 =="
+echo "==                  End of deployment script             =="
 echo "==========================================================="
