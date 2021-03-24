@@ -99,7 +99,7 @@
           },
           "monitor": {
             "settings": {
-              "image": "$upstream:443/ciprod:latest",
+              "image": "$ACR_ADDRESS/ciprod:latest",
               "createOptions": ""
             },
             "env": {
