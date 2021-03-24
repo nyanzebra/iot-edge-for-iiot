@@ -96,12 +96,13 @@ if [ ! -z $subscription ]; then
   az account set --subscription $subscription
 fi
 # subscriptionName=$(az account show --query 'name' -o tsv)
-# echo "Executing script with Azure Subscription: ${subscriptionName}" 
+# echo "Executing script with Azure Subscription: ${subscriptionName}"
 
 # Parse the configuration file
 source ${scriptFolder}/parseConfigFile.sh $configFilePath
 
 acrEnvFilePath="${scriptFolder}/$acrEnvFilePath"
+amlEnvFilePath="${scriptFolder}/$amlEnvFilePath"
 topLayerBaseDeploymentTemplateFilePath="${scriptFolder}/$topLayerBaseDeploymentTemplateFilePath"
 topLayerBaseDeploymentFilePath="${topLayerBaseDeploymentTemplateFilePath/.template/}"
 middleLayerBaseDeploymentFilePath="${scriptFolder}/$middleLayerBaseDeploymentFilePath"
@@ -115,6 +116,10 @@ echo ""
 # Verifying that the deployment manifest files are here
 if [ -z $acrEnvFilePath ]; then
     echo ".Env file with Azure Container Registry (ACR) credentials is missing from the configuration file. Please verify your configuration file. Exiting."
+    exit 1
+fi
+if [ -z $amlEnvFilePath ]; then
+    echo ".Env file with Azure Monitor Ids and Keys is missing from the configuration file. Please verify your configuration file. Exiting."
     exit 1
 fi
 if [ -z $topLayerBaseDeploymentTemplateFilePath ]; then
@@ -146,6 +151,27 @@ if [ -z $ACR_PASSWORD ]; then
 fi
 export ACR_ADDRESS ACR_USERNAME ACR_PASSWORD
 ${scriptFolder}/replaceEnv.sh $topLayerBaseDeploymentTemplateFilePath $topLayerBaseDeploymentFilePath 'ACR_ADDRESS' 'ACR_USERNAME' 'ACR_PASSWORD'
+if [ -z $topLayerBaseDeploymentFilePath ]; then
+    echo "TopLayerBaseDeploymentFilePath is missing. It has not been generated properly from its template. Exiting."
+    exit 1
+fi
+
+# Substitute AML env vars in deployment files
+source $amlEnvFilePath
+if [ -z $WORKSPACE_ID ]; then
+    echo "WORKSPACE_ID value is missing. Please verify your ACR.env file. Exiting."
+    exit 1
+fi
+if [ -z $WORKSPACE_KEY ]; then
+    echo "WORKSPACE_KEY value is missing. Please verify your ACR.env file. Exiting."
+    exit 1
+fi
+if [ -z $IOT_HUB_RESOURCE_ID ]; then
+    echo "IOT_HUB_RESOURCE_ID value is missing. Please verify your ACR.env file. Exiting."
+    exit 1
+fi
+export WORKSPACE_ID WORKSPACE_KEY IOT_HUB_RESOURCE_ID
+${scriptFolder}/replaceEnv.sh $topLayerBaseDeploymentTemplateFilePath $topLayerBaseDeploymentFilePath $middleLayerBaseDeploymentFilePath $bottomLayerBaseDeploymentFilePath 'WORKSPACE_ID' 'WORKSPACE_KEY' 'IOT_HUB_RESOURCE_ID'
 if [ -z $topLayerBaseDeploymentFilePath ]; then
     echo "TopLayerBaseDeploymentFilePath is missing. It has not been generated properly from its template. Exiting."
     exit 1
