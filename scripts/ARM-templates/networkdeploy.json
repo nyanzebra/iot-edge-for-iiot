@@ -661,6 +661,20 @@
             }
           },
           {
+            "name": "HttpsOut",
+            "properties": {
+              "description": "For AzureMonitor",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 101,
+              "direction": "Outbound"
+            }
+          },
+          {
             "name": "ToRemove_Allow_Machine_Build_4",
             "properties": {
               "description": "Remove, only used for custom script execution",
@@ -978,6 +992,20 @@
             }
           },
           {
+            "name": "HttpsOut",
+            "properties": {
+              "description": "For AzureMonitor",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 101,
+              "direction": "Outbound"
+            }
+          },
+          {
             "name": "ToRemove_Allow_Machine_Build_6",
             "properties": {
               "description": "Remove, only used for custom script execution",
@@ -1136,6 +1164,20 @@
               "destinationAddressPrefix": "*",
               "access": "Allow",
               "priority": 202,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "HttpsOut",
+            "properties": {
+              "description": "For AzureMonitor",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 101,
               "direction": "Outbound"
             }
           },

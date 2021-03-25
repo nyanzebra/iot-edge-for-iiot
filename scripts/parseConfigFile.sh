@@ -10,8 +10,8 @@ iiotAssetsSubnets=()
 acrEnvFilePath=""
 amlEnvFilePath=""
 topLayerBaseDeploymentTemplateFilePath=""
-middleLayerBaseDeploymentFilePath=""
-bottomLayerBaseDeploymentFilePath=""
+middleLayerBaseDeploymentTemplateFilePath=""
+bottomLayerBaseDeploymentTemplateFilePath=""
 rootCA=""
 
 while read line
@@ -31,12 +31,12 @@ do
         topLayerBaseDeploymentTemplateFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
         continue
     fi
-    if [ "${line:0:33}" == "MiddleLayerBaseDeploymentFilePath" ]; then
-        middleLayerBaseDeploymentFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
+    if [ "${line:0:41}" == "MiddleLayerBaseDeploymentTemplateFilePath" ]; then
+        middleLayerBaseDeploymentTemplateFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
         continue
     fi
-    if [ "${line:0:33}" == "BottomLayerBaseDeploymentFilePath" ]; then
-        bottomLayerBaseDeploymentFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
+    if [ "${line:0:41}" == "BottomLayerBaseDeploymentTemplateFilePath" ]; then
+        bottomLayerBaseDeploymentTemplateFilePath=$(echo ${line:2} | cut -d ":" -f2- | cut -d' ' -f 2 )
         continue
     fi
     if [ "${line:0:6}" == "RootCA" ]; then

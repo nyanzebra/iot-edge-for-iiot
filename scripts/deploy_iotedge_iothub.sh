@@ -105,8 +105,10 @@ acrEnvFilePath="${scriptFolder}/$acrEnvFilePath"
 amlEnvFilePath="${scriptFolder}/$amlEnvFilePath"
 topLayerBaseDeploymentTemplateFilePath="${scriptFolder}/$topLayerBaseDeploymentTemplateFilePath"
 topLayerBaseDeploymentFilePath="${topLayerBaseDeploymentTemplateFilePath/.template/}"
-middleLayerBaseDeploymentFilePath="${scriptFolder}/$middleLayerBaseDeploymentFilePath"
-bottomLayerBaseDeploymentFilePath="${scriptFolder}/$bottomLayerBaseDeploymentFilePath"
+middleLayerBaseDeploymentTemplateFilePath="${scriptFolder}/$middleLayerBaseDeploymentTemplateFilePath"
+middleLayerBaseDeploymentFilePath="${middleLayerBaseDeploymentTemplateFilePath/.template/}"
+bottomLayerBaseDeploymentTemplateFilePath="${scriptFolder}/$bottomLayerBaseDeploymentTemplateFilePath"
+bottomLayerBaseDeploymentFilePath="${bottomLayerBaseDeploymentTemplateFilePath/.template/}"
 
 echo "==========================================================="
 echo "==   Pushing base deployment to all IoT Edge devices     =="
@@ -126,12 +128,12 @@ if [ -z $topLayerBaseDeploymentTemplateFilePath ]; then
     echo "TopLayerBaseDeploymentTemplateFilePath is missing from the configuration file. Please verify your configuration file. Exiting."
     exit 1
 fi
-if [ ! -f $middleLayerBaseDeploymentFilePath ]; then
-    echo "middleLayerBaseDeployment manifest file not found. Make sure that the reference from the configuration file is correct. Exiting."
+if [ -z $middleLayerBaseDeploymentTemplateFilePath ]; then
+    echo "MiddleLayerBaseDeploymentTemplateFilePath is missing from the configuration file. Please verify your configuration file. Exiting."
     exit 1
 fi
-if [ ! -f $bottomLayerBaseDeploymentFilePath ]; then
-    echo "bottomLayerBaseDeployment manifest file not found. Make sure that the reference from the configuration file is correct. Exiting."
+if [ -z $bottomLayerBaseDeploymentTemplateFilePath ]; then
+    echo "BottomLayerBaseDeploymentTemplateFilePath is missing from the configuration file. Please verify your configuration file. Exiting."
     exit 1
 fi
 
@@ -150,11 +152,6 @@ if [ -z $ACR_PASSWORD ]; then
     exit 1
 fi
 export ACR_ADDRESS ACR_USERNAME ACR_PASSWORD
-${scriptFolder}/replaceEnv.sh $topLayerBaseDeploymentTemplateFilePath $topLayerBaseDeploymentFilePath 'ACR_ADDRESS' 'ACR_USERNAME' 'ACR_PASSWORD'
-if [ -z $topLayerBaseDeploymentFilePath ]; then
-    echo "TopLayerBaseDeploymentFilePath is missing. It has not been generated properly from its template. Exiting."
-    exit 1
-fi
 
 # Substitute AML env vars in deployment files
 source $amlEnvFilePath
@@ -171,9 +168,19 @@ if [ -z $IOT_HUB_RESOURCE_ID ]; then
     exit 1
 fi
 export WORKSPACE_ID WORKSPACE_KEY IOT_HUB_RESOURCE_ID
-${scriptFolder}/replaceEnv.sh $topLayerBaseDeploymentTemplateFilePath $topLayerBaseDeploymentFilePath $middleLayerBaseDeploymentFilePath $bottomLayerBaseDeploymentFilePath 'WORKSPACE_ID' 'WORKSPACE_KEY' 'IOT_HUB_RESOURCE_ID'
+${scriptFolder}/replaceEnv.sh $topLayerBaseDeploymentTemplateFilePath $topLayerBaseDeploymentFilePath 'ACR_ADDRESS' 'ACR_USERNAME' 'ACR_PASSWORD' 'WORKSPACE_ID' 'WORKSPACE_KEY' 'IOT_HUB_RESOURCE_ID'
 if [ -z $topLayerBaseDeploymentFilePath ]; then
     echo "TopLayerBaseDeploymentFilePath is missing. It has not been generated properly from its template. Exiting."
+    exit 1
+fi
+${scriptFolder}/replaceEnv.sh $middleLayerBaseDeploymentTemplateFilePath $middleLayerBaseDeploymentFilePath 'WORKSPACE_ID' 'WORKSPACE_KEY' 'IOT_HUB_RESOURCE_ID'
+if [ -z $middleLayerBaseDeploymentFilePath ]; then
+    echo "MiddleLayerBaseDeploymentFilePath is missing. It has not been generated properly from its template. Exiting."
+    exit 1
+fi
+${scriptFolder}/replaceEnv.sh $bottomLayerBaseDeploymentTemplateFilePath $bottomLayerBaseDeploymentFilePath 'WORKSPACE_ID' 'WORKSPACE_KEY' 'IOT_HUB_RESOURCE_ID'
+if [ -z $bottomLayerBaseDeploymentFilePath ]; then
+    echo "BottomLayerBaseDeploymentFilePath is missing. It has not been generated properly from its template. Exiting."
     exit 1
 fi
 
