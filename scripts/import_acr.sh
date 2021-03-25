@@ -91,5 +91,14 @@ echo "API proxy..."
 az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-api-proxy:latest --image azureiotedge-api-proxy:latest
 echo "Simulated temperature sensor..."
 az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:latest --image azureiotedge-simulated-temperature-sensor:latest
+echo "Industiral IoT - OPC-PLC simulation OPC UA Server ..."
+az acr import --name $acrName --force --source mcr.microsoft.com/iotedge/opc-plc:latest --image opc-plc:latest
+echo "Industiral IoT - OPC Publisher..."
+az acr import --name $acrName --force --source mcr.microsoft.com/iotedge/opc-publisher:2.7.206 --image opc-publisher:2.7.206
+echo "Industiral IoT - Twin..."
+az acr import --name $acrName --force --source mcr.microsoft.com/iotedge/opc-twin:2.7.206 --image opc-twin:2.7.206
+echo "Industiral IoT - Discovery ..."
+az acr import --name $acrName --force --source mcr.microsoft.com/iotedge/discovery:2.7.206 --image discovery:2.7.206
+
 echo "...done"
 echo ""
