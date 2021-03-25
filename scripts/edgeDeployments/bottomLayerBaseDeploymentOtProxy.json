@@ -69,7 +69,7 @@
           "opcpublisher": {
             "settings": {
               "image": "$upstream:443/opc-publisher:2.7.206",
-              "createOptions": "{\"Hostname\":\"opcpublisher\",\"Cmd\":[\"PkiRootPath=/mount/pki\",\"--pf=/mount/pn.json\",\"--di=60\",\"--to\",\"--aa\",\"--bs=1\",\"--fd=false\",\"--fm=true\",\"--mm=PubSub\",\"--me=Json\"],\"HostConfig\":{\"Binds\":[\"/mount:/mount\"]}}"
+              "createOptions": "{\"Hostname\":\"opcpublisher\",\"Cmd\":[\"PkiRootPath=/mount/pki\",\"--pf=/mount/published_nodes.json\",\"--lf=/mount/publisher.log\",\"--mm=Samples\",\"--me=Json\",\"--fm=true\",\"--fd=false\",\"--bs=100\",\"--BatchTriggerInterval=00:00:00.500\",\"--di=20\",\"--sc=1\",\"--aa\"],\"HostConfig\":{\"PortBindings\":{\"9702/tcp\":[{\"HostPort\":\"9702\"}]},\"Binds\":[\"/mount:/mount\"]}}"
             },
             "type": "docker",
             "version": "1.0",
