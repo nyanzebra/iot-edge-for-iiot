@@ -25,7 +25,7 @@
 AcrEnvFilePath: ../ACR.env
 AmlEnvFilePath: ../AML.env
 TopLayerBaseDeploymentTemplateFilePath: ./edgeDeployments/topLayerBaseDeploymentItProxy.template.json
-MiddleLayerBaseDeploymentFilePath: ./edgeDeployments/middleLayerBaseDeployment.json
-BottomLayerBaseDeploymentFilePath: ./edgeDeployments/bottomLayerBaseDeploymentOtProxy.json
+MiddleLayerBaseDeploymentTemplateFilePath: ./edgeDeployments/middleLayerBaseDeployment.template.json
+BottomLayerBaseDeploymentTemplateFilePath: ./edgeDeployments/bottomLayerBaseDeploymentOtProxy.template.json
 RootCA: https://raw.githubusercontent.com/Azure-Samples/iot-edge-for-iiot/master/scripts/assets/test-certs.tar.bz2
 

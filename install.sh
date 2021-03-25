@@ -146,7 +146,6 @@ jumpBoxSshPublicKeyPath="$(readlink -f ./scripts/.jbSshPublicKey)"
 jumpBoxUser=$(cat /tmp/jumpBoxUser)
 jumpBoxFQDN=$(cat /tmp/jumpBoxFQDN)
 
-./scripts/deploy_grafana.sh -sshPublicKeyPath=$jumpBoxSshPublicKeyPath -jbUserAndFQDN="$jumpBoxUser@$jumpBoxFQDN"
 ./scripts/deploy_iiotassets.sh -s=$subscription -l=$location -rg=$resourceGroupPrefix -vmSize=$vmSize -sshPublicKeyPath=$jumpBoxSshPublicKeyPath -c=$absoluteConfigFilePath
 ./scripts/deploy_iotedge_vms.sh -s=$subscription -l=$location -rg=$resourceGroupPrefix -vmSize=$vmSize -sshPublicKeyPath=$jumpBoxSshPublicKeyPath -c=$absoluteConfigFilePath
 ./scripts/provision_iotedge_iothub.sh -s=$subscription -hubrg=$iotHubResourceGroup -hubname=$iotHubName -c=$absoluteConfigFilePath

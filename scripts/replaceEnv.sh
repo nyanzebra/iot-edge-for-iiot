@@ -16,7 +16,7 @@ if [ -z $inputFilePath ]; then
     exit 1
 fi
 if [ ! -f "${inputFilePath}" ]; then
-    echo "File path does point at a valid file. Exiting."
+    echo "File path ${inputFilePath} does not point at a valid file. Exiting."
     exit 1
 fi
 if [ -z $outputFilePath ]; then
