@@ -21,10 +21,6 @@
             "env": {
               "httpSettings:enabled": {
                 "value": true
-              },
-              "RuntimeLogLevel": {
-                "value": "debug"
-              }
             }
           },
           "edgeHub": {
@@ -33,7 +29,7 @@
             "restartPolicy": "always",
             "settings": {
               "image": "$upstream:443/azureiotedge-hub:1.2.0-rc4",
-              "createOptions": "{\"HostConfig\": {\"PortBindings\": {\"443/tcp\": [{\"HostPort\": \"443\"}],\"5671/tcp\": [{\"HostPort\": \"5671\"}],\"8883/tcp\": [{\"HostPort\": \"8883\"}],\"9600/tcp\": [{\"HostPort\": \"9601\"}]}},\"ExposedPorts\": {\"5671/tcp\": {},\"8883/tcp\": {},\"9600/tcp\": {}}}"
+              "createOptions": "{\"HostConfig\":{\"PortBindings\":{\"5671/tcp\":[{\"HostPort\":\"5671\"}],\"8883/tcp\":[{\"HostPort\":\"8883\"}],\"9600/tcp\":[{\"HostPort\":\"9601\"}]}},\"ExposedPorts\":{\"5671/tcp\":{},\"8883/tcp\":{},\"9600/tcp\":{}}}"
             },
             "env": {
               "experimentalFeatures:enabled": {
@@ -62,7 +58,7 @@
           "opcpublisher": {
             "settings": {
               "image": "$upstream:443/opc-publisher:2.7.206",
-              "createOptions": "{\"Hostname\":\"opcpublisher\",\"Cmd\":[\"PkiRootPath=/mount/pki\",\"--pf=/mount/published_nodes.json\",\"--lf=/mount/publisher.log\",\"--mm=Samples\",\"--me=Json\",\"--fm=true\",\"--fd=false\",\"--bs=100\",\"--BatchTriggerInterval=00:00:00.500\",\"--di=20\",\"--sc=1\",\"--aa\"],\"HostConfig\":{\"PortBindings\":{\"9702/tcp\":[{\"HostPort\":\"9702\"}]},\"Binds\":[\"/mount:/mount\"]}}"
+              "createOptions": "{\"Hostname\":\"opcpublisher\",\"Cmd\":[\"PkiRootPath=/mount/pki\",\"--pf=/mount/published_nodes.json\",\"--lf=/mount/publisher.log\",\"--mm=Samples\",\"--me=Json\",\"--fm=true\",\"--fd=false\",\"--bs=100\",\"--BatchTriggerInterval=00:00:00.500\",\"--di=20\",\"--sc=1\",\"--aa\"],\"HostConfig\":{\"PortBindings\":{\"9702/tcp\":[{\"HostPort\":\"9702\"}]},\"Binds\":[\"/mount:/mount\"]},\"ExposedPorts\": {\"9702/tcp\": {}}}"
             },
             "type": "docker",
             "version": "1.0",
@@ -98,7 +94,7 @@
                 "value": "$IOT_HUB_RESOURCE_ID"
               },
               "MetricsEndpointsCSV": {
-                "value": "http://edgehub:9600/metrics,http://edgeagent:9600/metrics,http://opcpublist:9702/metrics"
+                "value": "http://edgehub:9600/metrics,http://edgeagent:9600/metrics,http://opcpublisher:9702/metrics"
               }
             },
             "type": "docker",
