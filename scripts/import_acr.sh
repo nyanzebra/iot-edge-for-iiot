@@ -87,17 +87,17 @@ echo "edgeHub..."
 az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-hub:1.2.0-rc4 --image azureiotedge-hub:1.2.0-rc4
 echo "diagnostics..."
 az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-diagnostics:1.2.0-rc4 --image azureiotedge-diagnostics:1.2.0-rc4
+echo "monitor..."
+az acr import --name acrqq4mbi.azurecr.io --force --source mcr.microsoft.com/azuremonitor/containerinsights/ciprod:iot-0.1.3.3 --image ciprod:latest
 echo "API proxy..."
 az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-api-proxy:latest --image azureiotedge-api-proxy:latest
-echo "Simulated temperature sensor..."
-az acr import --name $acrName --force --source mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:latest --image azureiotedge-simulated-temperature-sensor:latest
-echo "Industiral IoT - OPC-PLC simulation OPC UA Server ..."
+echo "IIoT - OpcPlc server ..."
 az acr import --name $acrName --force --source mcr.microsoft.com/iotedge/opc-plc:latest --image opc-plc:latest
-echo "Industiral IoT - OPC Publisher..."
+echo "IoT - OPC Publisher..."
 az acr import --name $acrName --force --source mcr.microsoft.com/iotedge/opc-publisher:2.7.206 --image opc-publisher:2.7.206
-echo "Industiral IoT - Twin..."
+echo "IIoT - Twin..."
 az acr import --name $acrName --force --source mcr.microsoft.com/iotedge/opc-twin:2.7.206 --image opc-twin:2.7.206
-echo "Industiral IoT - Discovery ..."
+echo "IIoT - Discovery ..."
 az acr import --name $acrName --force --source mcr.microsoft.com/iotedge/discovery:2.7.206 --image discovery:2.7.206
 
 echo "...done"
